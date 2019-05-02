@@ -128,6 +128,15 @@ commands = {	// all commands list below
 			msg.channel.send(text);
 		}
 	},
+    "repi": {
+        description: "detects if there is a furry around you",
+        process: function(bot, msg, suffix) {
+            msg.channel.send( msg.author+" that person is gay!");
+            if(suffix){
+                msg.channel.send( "repi is just gay");
+            }
+        }
+    },	
     "ping": {
         description: "responds pong, useful for checking if bot is alive",
         process: function(bot, msg, suffix) {
