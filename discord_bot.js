@@ -129,7 +129,7 @@ commands = {	// all commands list below
     "ping": {
         description: "responds pong, useful for checking if bot is alive",
         process: function(bot, msg, suffix) {
-            msg.channel.send( msg.author+" pong!");
+            msg.channel.send( new Date().getTime() - message.createdTimestamp + " ms"");
             if(suffix){
                 msg.channel.send( "note that !ping takes no arguments!");
             }
