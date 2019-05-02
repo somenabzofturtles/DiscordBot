@@ -276,7 +276,7 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: Config.commandPrefix+"help | " + bot.guilds.array().length +" Servers"
+			name: Config.commandPrefix+"help | "  + "Kirby's Personal Bot "
 		}
 	}); 
 });
