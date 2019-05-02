@@ -15,6 +15,8 @@ try {
 }
 console.log("Starting DiscordBot\nNode version: " + process.version + "\nDiscord.js version: " + Discord.version); // send message notifying bot boot-up
 
+
+
 // Get authentication data
 try {
 	var AuthDetails = require("./auth.json");
@@ -129,7 +131,7 @@ commands = {	// all commands list below
     "ping": {
         description: "responds pong, useful for checking if bot is alive",
         process: function(bot, msg, suffix) {
-            msg.channel.send(new Date().getTime() - message.createdTimestamp + " ms"");
+            msg.channel.send( msg.author+" pong!");
             if(suffix){
                 msg.channel.send( "note that !ping takes no arguments!");
             }
@@ -274,7 +276,7 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: Config.commandPrefix+"help | " + " Kirby's Personal Bot"
+			name: Config.commandPrefix+"help | " + bot.guilds.array().length +" Servers"
 		}
 	}); 
 });
