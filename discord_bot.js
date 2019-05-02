@@ -137,15 +137,6 @@ commands = {	// all commands list below
             }
         }
     },
-	"repi": {
-        description: "gay",
-        process: function(bot, msg, suffix) {
-            msg.channel.send( msg.author+" @repi is a gay ass nibber");
-            if(suffix){
-                msg.channel.send( "this guy is gay");
-            }
-        }
-    },
     "idle": {
 		usage: "[status]",
         description: "sets bot status to idle",
