@@ -276,7 +276,7 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: 'Anime' , type: 'WATCHING'
+			name: 'Sewayaki Kitsune no Senko-san' , type: 'WATCHING'
 		}
 	}); 
 });
