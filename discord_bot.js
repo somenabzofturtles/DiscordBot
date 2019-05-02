@@ -276,7 +276,9 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: Config.commandPrefix+"help | "  + "Kirby's Personal Bot "
+			name: 'Animne' , type: 'WATCHING' }, status: 'idle' }) "
+	.then(console.log)
+    .catch(console.error);
 		}
 	}); 
 });
