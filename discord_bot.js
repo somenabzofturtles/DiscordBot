@@ -73,7 +73,7 @@ try{
 	Config = require("./config.json");
 } catch(e){ //no config file, use defaults
 	Config.debug = false;
-	Config.commandPrefix = '!';
+	Config.commandPrefix = 'k!';
 	try{
 		if(fs.lstatSync("./config.json").isFile()){ // open config file
 			console.log("WARNING: config.json found but we couldn't read it!\n" + e.stack); // corrupted config file
