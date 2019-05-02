@@ -9,6 +9,7 @@
     "eval": false,
     "pullanddeploy": false,
     "setUsername": false,
+    "wiki": false
     "cmdauth": false
   },
   "users": {
