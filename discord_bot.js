@@ -15,8 +15,6 @@ try {
 }
 console.log("Starting DiscordBot\nNode version: " + process.version + "\nDiscord.js version: " + Discord.version); // send message notifying bot boot-up
 
-client.login(process.env.BOT_TOKEN);
-
 // Get authentication data
 try {
 	var AuthDetails = require("./auth.json");
