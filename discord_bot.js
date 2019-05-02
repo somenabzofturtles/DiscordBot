@@ -131,7 +131,7 @@ commands = {	// all commands list below
     "repi": {
         description: "detects if there is a furry around you",
         process: function(bot, msg, suffix) {
-            msg.channel.send( msg.author+" that person is gay!");
+            msg.channel.send( msg.author+" @repi#6040 has been called by the Visayas Gods");
             if(suffix){
                 msg.channel.send( "repi is just gay");
             }
