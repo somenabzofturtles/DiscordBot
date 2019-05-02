@@ -128,10 +128,10 @@ commands = {	// all commands list below
 			msg.channel.send(text);
 		}
 	},
-    "repi": {
+    "furry": {
         description: "detects if there is a furry around you",
         process: function(bot, msg, suffix) {
-            msg.channel.send( msg.author+" @repi#6040 has been called by the Visayas Gods");
+            msg.channel.send( msg.author+" You are a disgusting furry.");
             if(suffix){
                 msg.channel.send( "repi is just gay");
             }
