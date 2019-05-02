@@ -452,3 +452,12 @@ if(AuthDetails.bot_token){
 } else {
 	console.log("Logging in with user credentials is no longer supported!\nYou can use token based log in with a user account, see\nhttps://discord.js.org/#/docs/main/master/general/updating");
 }
+client.on('message', message => {
+    // If the message is '!rip'
+    if (message.content === '!repi') {
+        // Create the attachment using Attachment
+        const attachment = new Attachment('https://www.abc.net.au/news/image/9727874-3x2-700x467.jpg');
+        // Send the attachment in the message channel with a content
+        message.channel.send(`${message.author},`, attachment);
+    }
+});
