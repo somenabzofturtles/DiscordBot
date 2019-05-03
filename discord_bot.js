@@ -278,7 +278,6 @@ var bot = new Discord.Client();
 var hooks = {
 	onMessage: []
 }
-
 bot.on("ready", function () {
 	console.log("Logged in! Serving in " + bot.guilds.array().length + " servers");
 	require("./plugins.js").init(hooks);
@@ -292,13 +291,7 @@ setInterval(function() {
     //master
     client.user.setPresence({activity: { name: status }, status: 'watching' });
 }, 10000)
-
-
 })
-
-		}
-	}); 
-});
 
 bot.on("disconnected", function () {
 
