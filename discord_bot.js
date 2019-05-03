@@ -285,7 +285,7 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	let statuses = ['Kirby’s Personal Bot', 'Sewayaki no Kitsune no Senko San', 'inDev']
 client.on('ready', () =>
-})
+});
 setInterval(function() {
     let status = statuses[Math.floor](Math.random()*statuses.length)];
     //client.user.setPresence({game: { name: status }, status: 'online' });
