@@ -287,9 +287,9 @@ client.on('ready', () => {
 })
 setInterval(function() {
     let status = statuses[Math.floor(Math.random()*statuses.length)];
-    //client.user.setPresence({game: { name: status }, status: 'online' });
+    client.user.setPresence({game: { name: status }, status: 'online' });
     //master
-    client.user.setPresence({activity: { name: status }, status: 'watching' });
+    //client.user.setPresence({activity: { name: status }, status: 'watching' });
 }, 10000)
 })
 
