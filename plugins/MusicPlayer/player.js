@@ -1,7 +1,5 @@
 const YoutubeDL = require('youtube-dl');
 const Request = require('request');
-const ytdl = require('ytdl-core');
-const _ = require('lodash');
 exports.commands = [
 	"play",
 	"skip",
@@ -9,11 +7,9 @@ exports.commands = [
 	"dequeue",
 	"pause",
 	"resume",
-	"volume",
-	"clearqueue"
+	"volume"
 ]
 
-NOW_PLAYING = false;
 let options = false;
 	let PREFIX = (options && options.prefix) || '!';
 	let GLOBAL_QUEUE = (options && options.global) || false;
@@ -35,21 +31,6 @@ let options = false;
 		return queues[server];
 	}
 
-	function isUrl(str) {
-	  var pattern = new RegExp('^(https?:\/\/)?'+ // protocol
-	    '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+ // domain name
-	    '((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
-	    '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
-	    '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
-	    '(\#[-a-z\d_]*)?$','i'); // fragment locater
-	  if(!pattern.test(str)) {
-	    alert("Please enter a valid URL.");
-	    return false;
-	  } else {
-	    return true;
-	  }
-	}
-
 	/*
 	 * Play command.
 	 *
@@ -69,7 +50,7 @@ exports.play = {
 		if (!suffix) return msg.channel.sendMessage( wrap('No video specified!'));
 
 		// Get the queue.
-		let queue = getQueue(msg.guild.id);
+		const queue = getQueue(msg.guild.id);
 
 		// Check if the queue has reached its maximum size.
 		if (queue.length >= MAX_QUEUE_SIZE) {
@@ -77,23 +58,16 @@ exports.play = {
 		}
 
 		// Get the video information.
-		msg.channel.send( wrap('Searching...')).then(response => {
-			debugger;
-			console.log(suffix);
+		msg.channel.sendMessage( wrap('Searching...')).then(response => {
 			// If the suffix doesn't start with 'http', assume it's a search.
-			if (!suffix.toString().toLowerCase().startsWith('http')) {
-				console.log("here");
-				suffix = 'ytsearch1:' + suffix;
+			if (!suffix.toLowerCase().startsWith('http')) {
+				suffix = 'gvsearch1:' + suffix;
+			}
 
 			// Get the video info from youtube-dl.
-			YoutubeDL.getInfo(suffix, [ '-i', '--max-downloads 1', '--no-check-certificate','--no-warnings', '--force-ipv4'], (err, info) => {
-				debugger;
-
-				console.log(info);
+			YoutubeDL.getInfo(suffix, ['-q', '--no-warnings', '--force-ipv4'], (err, info) => {
 				// Verify the info.
-				console.log("1")
 				if (err || info.format_id === undefined || info.format_id.startsWith('0')) {
-					console.log(err)
 					return response.edit( wrap('Invalid video!'));
 				}
 
@@ -106,56 +80,9 @@ exports.play = {
 						executeQueue(client, msg, queue);
 						resp.delete(1000);
 					}
-				}).catch((e) => {
-					console.log("2")
-					console.log(e);
-		
-				});
+				}).catch(() => {});
 			});
-			} else {
-				console.log("there");
-					YoutubeDL.getInfo(suffix, [ '--no-check-certificate','--no-warnings', '--force-ipv4', '--yes-playlist', '-i'], (err, info) => {
-						//console.log(err, info);
-					if(_.isArray(info)){
-						console.log("concat playlist")
-						console.log(queue);
-						queue = queue.concat(info)
-						//queue = queue.push.apply(queue, info);
-						response.edit( wrap('Queued: a playlist')).then((resp) => {
-
-							// Play if only one element in the queue.
-							if (!NOW_PLAYING) {
-								executeQueue(client, msg, queue);
-								resp.delete(1000);
-							}
-						}).catch((e) => {console.log(e)});
-						
-					}
-					else {
-
-
-					
-					console.log(err, info);
-					// // Verify the info.
-					// if (err || info.format_id === undefined || info.format_id.startsWith('0')) {
-					// 	console.log(err)
-					// 	return response.edit( wrap('Invalid video!'));
-					// }
-
-					// Queue the video.
-					response.edit( wrap('Queued: ' + info.title?info.title:"")).then((resp) => {
-						queue.push(info);
-
-						// Play if only one element in the queue.
-						if (queue.length === 1) {
-							executeQueue(client, msg, queue);
-							resp.delete(1000);
-						}
-					}).catch((e) => {console.log(e)});
-					}
-				});
-		}
-		}).catch((e) => {console.log(e)});
+		}).catch(() => {});
 	}
 }
 
@@ -206,9 +133,8 @@ exports.queue = {
 		const queue = getQueue(msg.guild.id);
 
 		// Get the queue text.
-		console.log(queue);
 		const text = queue.map((video, index) => (
-			(index + 1) + ': ' + video.title || video.track
+			(index + 1) + ': ' + video.title
 		)).join('\n');
 
 		// Get the status of the queue.
@@ -234,7 +160,7 @@ exports.dequeue = {
 	process: function(client, msg, suffix) {
 		// Define a usage string to print out on errors
 		const usageString = 'The format is "!dequeue <index>".  Use !queue to find the indices of each song in the queue.';
-
+		
 		// Get the queue.
 		const queue = getQueue(msg.guild.id);
 
@@ -245,36 +171,36 @@ exports.dequeue = {
 		// Get the arguments
 		var split = suffix.split(/(\s+)/);
 
-		// Make sure there's only 1 index
+		// Make sure there's only 1 index 
 		if (split.length > 1)
 			return msg.channel.sendMessage( wrap('There are too many arguments.  ' + usageString));
-
+		
 		// Remove the index
 		var index = parseInt(split[0]);
 		var songRemoved = ''; // To be filled out below
 		if (!isNaN(index)) {
 			index = index - 1;
-
+			
 			if (index >= 0 && index < queue.length) {
 				songRemoved = queue[index].title;
-
+				
 				if (index == 0) {
 					// If it was the first one, skip it
 					const voiceConnection = client.voiceConnections.get(msg.guild.id);
-					if (voiceConnection.player.dispatcher)
+					if (voiceConnection.player.dispatcher) 
 						voiceConnection.player.dispatcher.resume();
 					voiceConnection.player.dispatcher.end();
 				} else {
 					// Otherwise, just remove it from the queue
 					queue.splice(index, 1);
-				}
+				}				
 			} else {
 				return msg.channel.sendMessage( wrap('The index is out of range.  ' + usageString));
 			}
 		} else {
 			return msg.channel.sendMessage( wrap('That index isn\'t a number.  ' + usageString));
 		}
-
+		
 		// Send the queue and status.
 		msg.channel.sendMessage( wrap('Removed \'' + songRemoved + '\' (index ' + split[0] + ') from the queue.'));
 	}
@@ -302,7 +228,7 @@ exports.pause = {
 	/*
 	 * Resume command.
 	 *
-	 * $@param msg Original message.
+	 * @param msg Original message.
 	 * @param suffix Command suffix.
 	 */
 exports.resume = {
@@ -316,18 +242,6 @@ exports.resume = {
 		msg.channel.sendMessage( wrap('Playback resumed.'));
 		if (voiceConnection.player.dispatcher) voiceConnection.player.dispatcher.resume();
 	}
-}
-
-exports.clearqueue = {
-	description: "removes everything from the queue",
-	process: function(client, msg, suffix) {
-		const queue = getQueue(msg.guild.id);
-		const voiceConnection = client.voiceConnections.get(msg.guild.id);
-
-		queue = [];
-		executeQueue(client, msg, queue, voiceConnection.player.dispatcher);
-	}
-
 }
 
 /*
@@ -372,18 +286,15 @@ exports.volume = {
 	 * @param msg Original message.
 	 * @param queue The queue.
 	 */
-function executeQueue(client, msg, queue, my_dispatcher) {
+function executeQueue(client, msg, queue) {
 		// If the queue is empty, finish.
 		if (queue.length === 0) {
 			msg.channel.sendMessage( wrap('Playback finished.'));
-			NOW_PLAYING = false;
+
 			// Leave the voice channel.
-			
-			if (my_dispatcher != null) {
-				my_dispatcher.end();
-			}
 			const voiceConnection = client.voiceConnections.get(msg.guild.id);
-			if(null != voiceConnection){
+			if (voiceConnection != null) {
+				voiceConnection.player.dispatcher.end();
 				voiceConnection.channel.leave();
 				return;
 			}
@@ -409,90 +320,32 @@ function executeQueue(client, msg, queue, my_dispatcher) {
 			}
 		}).then(connection => {
 			// Get the first item in the queue.
-			console.log('THE QUEUE------')
-			console.log(queue);
-			console.log('_______THE QUEUE------')
-			console.log('POPING A VIDEO OFF THE QUEUE')
-
 			const video = queue[0];
-			
-			console.log(video);
 
 			// Play the video.
-			msg.channel.send( wrap('Now Playing: ' + video.title),{
-				embed:{
-					thumbnail: {
-						url: video.thumbnail
-					}
-			 	}
-			}).then(response => {
-				const streamOptions = {volume: .5 };
-
-				var size = 0;
-				var pos = 0;
-
-				var videoStream = YoutubeDL(video.webpage_url,
-
-				// Optional arguments passed to youtube-dl.
-				['-f', 'bestaudio']
-
-				// start will be sent as a range header
-				);
-
-				// ytdl.exec(url, ['-x', '--audio-format', 'mp3'], {}, function exec(err, output) {
-				// 	'use strict';
-				// 	if (err) { throw err; }
-				// 	console.log(output.join('\n'));
-				// });
-				NOW_PLAYING = true;
-				const dispatcher = connection.playStream(videoStream, streamOptions);
+			msg.channel.sendMessage( wrap('Now Playing: ' + video.title)).then((cur) => {
+				const dispatcher = connection.playStream(Request(video.url));
 				//dispatcher.then(intent => {
-				dispatcher.on('debug',(i)=>console.log("debug: " + i));
-				// Catch errors in the connection.
-				dispatcher.on('error', (err) => {
-					msg.channel.sendMessage("fail: " + err);
-					// Skip to the next song.
-					queue.shift();
-					executeQueue(client, msg, queue, dispatcher);
-				});
-
-				// Catch the end event.
-				dispatcher.on('end', () => {
-					console.log("stream ended");
-					// Wait a second.
-					setTimeout(() => {
-						// Remove the song from the queue.
+					dispatcher.on('debug',(i)=>console.log("debug: " + i));
+					// Catch errors in the connection.
+					dispatcher.on('error', (err) => {
+						msg.channel.sendMessage("fail: " + err);
+						// Skip to the next song.
 						queue.shift();
+						executeQueue(client, msg, queue);
+					});
 
-						// Play the next song in the queue.
-						executeQueue(client, msg, queue, dispatcher);
-					}, 1000);
-				});
-				videoStream.on('next', (song) =>{
-					console.log("NEXT SONG?!?!??!?!")
-					console.log(song);
-					debugger;
-					queue.push(song);
-					//queue.push()
-				});
+					// Catch the end event.
+					dispatcher.on('end', () => {
+						// Wait a second.
+						setTimeout(() => {
+							// Remove the song from the queue.
+							queue.shift();
 
-				videoStream.on('info', function(info) {
-					size = info.size;
-				});
-
-				videoStream.on('data', function data(chunk) {
-					
-					pos += chunk.length;
-				
-					// `size` should not be 0 here.
-					if (size) {
-						var percent = (pos / size * 100).toFixed(2);
-						//response.edit
-						//console.log(percent + '%');
-					}
-				});
-				
-
+							// Play the next song in the queue.
+							executeQueue(client, msg, queue);
+						}, 1000);
+					});
 				//}).catch((ex) => {msg.channel.sendMessage("playStream fail: " + ex)});//*/
 			}).catch(console.error);
 		}).catch(console.error);
@@ -513,9 +366,4 @@ function getAuthorVoiceChannel(msg) {
  */
 function wrap(text) {
 	return '```\n' + text.replace(/`/g, '`' + String.fromCharCode(8203)) + '\n```';
-}
-
-
-function wrapSongInfo(text, url){
-	return '```\n' + url + text.replace(/`/g, '`' + String.fromCharCode(8203)) + '\n```';
 }
