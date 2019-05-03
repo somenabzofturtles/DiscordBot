@@ -283,12 +283,19 @@ bot.on("ready", function () {
 	console.log("Logged in! Serving in " + bot.guilds.array().length + " servers");
 	require("./plugins.js").init(hooks);
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
-	client.on('ready', ()=>
-		  setInterval(function) {
-		  let status = statuses[Math.floor(Math.random()=statuses.length)];
-		client.user.setPresence({ game: Test bot 123 { name: status }, status 'dnd' });
-	        //client.user.setPresence({ activity: { name: status }, status: 'online' });
+	let statuses = ['Kirby’s Personal Bot', 'Sewayaki no Kitsune no Senko San', 'inDev']
+client.on('ready', () =>
+})
+setInterval(function() {
+    let status = statuses[Math.floor](Math.random()*statuses.length)];
+    //client.user.setPresence({game: { name: status }, status: 'online' });
+    //master
+    client.user.setPresence({activity: { name: status }), status: 'watching' });
+     url: "https://www.twitch.tv/TwitchPresents"
 }, 10000)
+
+})
+
 		}
 	}); 
 });
