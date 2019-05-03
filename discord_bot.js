@@ -284,15 +284,15 @@ bot.on("ready", function () {
 	require("./plugins.js").init(hooks);
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	let statuses = ['Kirby’s Personal Bot', 'Sewayaki no Kitsune no Senko San', 'inDev']
-client.on('ready', () =>
-});
+client.on('ready', () => {
+})
 setInterval(function() {
-    let status = statuses[Math.floor](Math.random()*statuses.length)];
+    let status = statuses[Math.floor(Math.random()*statuses.length)];
     //client.user.setPresence({game: { name: status }, status: 'online' });
     //master
-    client.user.setPresence({activity: { name: status }), status: 'watching' });
-     url: "https://www.twitch.tv/TwitchPresents"
+    client.user.setPresence({activity: { name: status }, status: 'watching' });
 }, 10000)
+
 
 })
 
