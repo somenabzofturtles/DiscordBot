@@ -284,7 +284,7 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: 'Sewayaki Kitsune no Senko-san' , type: 'STREAMING'
+			name: 'Sewayaki Kitsune no Senko-san'
             type: "STREAMING",
             url: "https://www.twitch.tv/TwitchPresents"
 		}
