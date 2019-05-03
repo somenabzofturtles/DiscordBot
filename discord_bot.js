@@ -285,7 +285,12 @@ bot.on("ready", function () {
 	console.log("type "+Config.commandPrefix+"help in Discord for a commands list.");
 	bot.user.setPresence({
 		game: {
-			name: 'Sewayaki Kitsune no Senko-san' , type: 'WATCHING'
+			let activityTypes = ['PLAYING','STREAMING','LISTENING','WATCHING']
+let randomType = activityTypes[Math.floor((Math.random()*activityTypes.length))]
+
+setInterval(async ()=>{
+    await client.user.setActivity('Sewayaki Kitsune no Senko San', { type: STREAMING })
+},15000)
 		}
 	}); 
 });
